@@ -62,8 +62,9 @@ public class UpdateCourse
                         _dataContext.Courses.Update(courseToUpdate);
                         var res = await _dataContext.SaveChangesAsync();
                         if (res == 200)
-                        {
-                            return new OkResult();
+                        { 
+                            var json = JsonConvert.SerializeObject(courseToUpdate);
+                            return new OkObjectResult(json);
                         }
                         else
                         {
