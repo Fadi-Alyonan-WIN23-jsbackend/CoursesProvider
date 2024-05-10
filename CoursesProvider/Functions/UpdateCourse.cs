@@ -44,31 +44,31 @@ public class UpdateCourse
                 var courseToUpdate = _dataContext.Courses.FirstOrDefault(x => x.Id == cm.Id);
                 if (courseToUpdate != null)
                 {
-                    courseToUpdate = new Course
-                    {
-                        Image = cm.Image,
-                        Title = cm.Title,
-                        Author = cm.Author,
-                        OriginalPrice = cm.OriginalPrice,
-                        DiscountPrice = cm.DiscountPrice,
-                        Hours = cm.Hours,
-                        LikesInProcent = cm.LikesInProcent,
-                        NumberOfLikes = cm.NumberOfLikes,
-                        IsBestseller = cm.IsBestseller,
-                        IsDigital = cm.IsDigital
-                    };
+                    courseToUpdate.Image = cm.Image;
+                    courseToUpdate.Title = cm.Title;
+                    courseToUpdate.Author = cm.Author;
+                    courseToUpdate.OriginalPrice = cm.OriginalPrice;
+                    courseToUpdate.DiscountPrice = cm.DiscountPrice;
+                    courseToUpdate.Hours = cm.Hours;
+                    courseToUpdate.LikesInProcent = cm.LikesInProcent;
+                    courseToUpdate.NumberOfLikes = cm.NumberOfLikes;
+                    courseToUpdate.IsBestseller = cm.IsBestseller;
+                    courseToUpdate.IsDigital = cm.IsDigital;
+
                     try
                     {
                         _dataContext.Courses.Update(courseToUpdate);
-                        var res = await _dataContext.SaveChangesAsync();
+                        await _dataContext.SaveChangesAsync();
                         var json = JsonConvert.SerializeObject(courseToUpdate);
                         return new OkObjectResult(json);
                     }
-                    catch (Exception ex) { _logger.LogError($" User Manager Create :: {ex.Message}"); }
-
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($" Course update :: {ex.Message}");
+                        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                    }
                 }
             }
-            return new BadRequestResult();
         }
         return new BadRequestResult();
     }
