@@ -2,6 +2,7 @@
 
 public class CourseModel
 {
+    public string? Id { get; set; }
     public string Image { get; set; } = null!;
     public string Title { get; set; } = null!;
     public string Author { get; set; } = null!;
