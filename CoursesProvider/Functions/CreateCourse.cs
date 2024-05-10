@@ -62,11 +62,9 @@ public class CreateCourse
                     try
                     {
                         _dataContext.Courses.Add(courseModel);
-                        var res = await _dataContext.SaveChangesAsync();
-                        if (res == 200)
-                        {
-                            return new OkResult();
-                        }
+                        await _dataContext.SaveChangesAsync();
+                        return new CreatedResult();
+                        
                     }
                     catch (Exception ex) { _logger.LogError($" User Manager Create :: {ex.Message}"); }
 

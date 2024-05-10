@@ -61,15 +61,8 @@ public class UpdateCourse
                     {
                         _dataContext.Courses.Update(courseToUpdate);
                         var res = await _dataContext.SaveChangesAsync();
-                        if (res == 200)
-                        { 
-                            var json = JsonConvert.SerializeObject(courseToUpdate);
-                            return new OkObjectResult(json);
-                        }
-                        else
-                        {
-                            return new BadRequestResult();
-                        }
+                        var json = JsonConvert.SerializeObject(courseToUpdate);
+                        return new OkObjectResult(json);
                     }
                     catch (Exception ex) { _logger.LogError($" User Manager Create :: {ex.Message}"); }
 

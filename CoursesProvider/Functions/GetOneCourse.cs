@@ -43,7 +43,6 @@ public class GetOneCourse
 
             if (cm != null && !string.IsNullOrEmpty(cm.Id))
             {
-
                 try
                 {
                     var course = await _dataContext.Courses.FirstOrDefaultAsync(x => x.Id == cm.Id);

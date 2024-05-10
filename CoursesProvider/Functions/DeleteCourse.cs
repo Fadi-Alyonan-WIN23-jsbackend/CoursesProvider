@@ -48,14 +48,7 @@ namespace CoursesProvider.Functions
                         {
                             _dataContext.Courses.Remove(course);
                             var res = await _dataContext.SaveChangesAsync();
-                            if (res == 200)
-                            {
-                                return new OkResult();
-                            }
-                            else
-                            {
-                                new BadRequestResult();
-                            }
+                            return new OkResult();
 
                         }
                         else

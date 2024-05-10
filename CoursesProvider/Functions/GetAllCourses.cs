@@ -30,7 +30,6 @@ public class GetAllCourses
             if (courses != null)
             {
                 var json = JsonConvert.SerializeObject(courses);
-
                 return new OkObjectResult(json);
             }
         }
