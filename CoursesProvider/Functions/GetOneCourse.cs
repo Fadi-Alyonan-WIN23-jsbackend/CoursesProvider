@@ -30,7 +30,12 @@ public class GetOneCourse
         {
             body = await new StreamReader(req.Body).ReadToEndAsync();
         }
-        catch (Exception ex) { _logger.LogError($" StreamReader GetOneCourse :: {ex.Message}"); }
+        catch (Exception ex) 
+        { 
+            _logger.LogError($" StreamReader GetOneCourse :: {ex.Message}"); 
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+
+        }
 
         if (body != null)
         {
@@ -56,7 +61,12 @@ public class GetOneCourse
                         return new NotFoundResult();
                     }
                 }
-                catch (Exception ex) { _logger.LogError($" Get one Course :: {ex.Message}"); }
+                catch (Exception ex) 
+                { 
+                    _logger.LogError($" Get one Course :: {ex.Message}"); 
+                    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+
+                }
 
             }
         }

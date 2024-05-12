@@ -31,7 +31,11 @@ public class CreateCourse
         {
             body = await new StreamReader(req.Body).ReadToEndAsync();
         }
-        catch (Exception ex) { _logger.LogError($" StreamReader Courses :: {ex.Message}"); }
+        catch (Exception ex) 
+        { 
+            _logger.LogError($" StreamReader create course :: {ex.Message}");
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
 
         if (body != null)
         {
@@ -66,11 +70,15 @@ public class CreateCourse
                         return new CreatedResult();
                         
                     }
-                    catch (Exception ex) { _logger.LogError($" User Manager Create :: {ex.Message}"); }
+                    catch (Exception ex) 
+                    { 
+                        _logger.LogError($" Create course :: {ex.Message}");
+                        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                    }
 
                 }
             }
-            return new BadRequestResult();
+            return new ConflictResult();
         }
         return new BadRequestResult();
     }

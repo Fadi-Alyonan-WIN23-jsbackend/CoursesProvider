@@ -2,6 +2,7 @@ using CoursesProvider.Models;
 using Data.Context;
 using Data.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
@@ -21,14 +22,18 @@ public class UpdateCourse
     }
 
     [Function("UpdateCourse")]
-    public async Task <IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+    public async Task <IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)
     {
         string body = null!;
         try
         {
             body = await new StreamReader(req.Body).ReadToEndAsync();
         }
-        catch (Exception ex) { _logger.LogError($" StreamReader UpdateCourse :: {ex.Message}"); }
+        catch (Exception ex) 
+        { 
+            _logger.LogError($" StreamReader UpdateCourse :: {ex.Message}"); 
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
 
         if (body != null)
         {
@@ -37,7 +42,11 @@ public class UpdateCourse
             {
                 cm = JsonConvert.DeserializeObject<CourseModel>(body)!;
             }
-            catch (Exception ex) { _logger.LogError($" JsonConvert.DeserializeObject<CourseModel/Update> :: {ex.Message} "); }
+            catch (Exception ex) 
+            { 
+                _logger.LogError($" JsonConvert.DeserializeObject<CourseModel/Update> :: {ex.Message} ");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
 
             if (cm != null && !string.IsNullOrEmpty(cm.Id))
             {
@@ -64,9 +73,13 @@ public class UpdateCourse
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError($" Course update :: {ex.Message}");
+                        _logger.LogError($" Update course :: {ex.Message}");
                         return new StatusCodeResult(StatusCodes.Status500InternalServerError);
                     }
+                }
+                else
+                {
+                    return new NotFoundResult();
                 }
             }
         }

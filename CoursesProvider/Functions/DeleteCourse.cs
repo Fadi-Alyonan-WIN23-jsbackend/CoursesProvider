@@ -20,14 +20,18 @@ namespace CoursesProvider.Functions
         }
 
         [Function("DeleteCourse")]
-        public async Task <IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+        public async Task <IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)
         {
             string body = null!;
             try
             {
                 body = await new StreamReader(req.Body).ReadToEndAsync();
             }
-            catch (Exception ex) { _logger.LogError($" StreamReader DeleteCourse :: {ex.Message}"); }
+            catch (Exception ex) 
+            { 
+                _logger.LogError($" StreamReader DeleteCourse :: {ex.Message}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
 
             if (body != null)
             {
@@ -36,7 +40,11 @@ namespace CoursesProvider.Functions
                 {
                     cm = JsonConvert.DeserializeObject<CourseModel>(body)!;
                 }
-                catch (Exception ex) { _logger.LogError($" JsonConvert.DeserializeObject<CourseModel/delete> :: {ex.Message} "); }
+                catch (Exception ex) 
+                { 
+                    _logger.LogError($" JsonConvert.DeserializeObject<CourseModel/delete> :: {ex.Message} "); 
+                    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                }
 
                 if (cm != null && !string.IsNullOrEmpty(cm.Id))
                 {
@@ -56,7 +64,11 @@ namespace CoursesProvider.Functions
                             return new NotFoundResult();
                         }
                     }
-                    catch (Exception ex) { _logger.LogError($" Get one Course :: {ex.Message}"); }
+                    catch (Exception ex) 
+                    { 
+                        _logger.LogError($" Delete Course :: {ex.Message}"); 
+                        return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                    }
 
                 }
             }
